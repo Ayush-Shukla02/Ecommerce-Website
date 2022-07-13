@@ -111,6 +111,8 @@ const LoginDialog = ({ open, setOpen }) => {
 
 	const signupUser = async () => {
 		let response = await authenticateSignup(signup);
+		if (!response) return;
+		handleClose();
 	};
 
 	return (
