@@ -10,7 +10,7 @@ export const getProducts = () => async (dispatch) => {
 	} catch (error) {
 		dispatch({
 			type: actionTypes.GET_PRODUCTS_FAIL,
-			payload: error.message,
+			payload: error.response,
 		});
 	}
 };
