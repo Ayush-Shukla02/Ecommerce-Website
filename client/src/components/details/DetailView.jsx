@@ -32,23 +32,20 @@ const DetailView = () => {
 	);
 
 	useEffect(() => {
-		if (product && id !== product.product.id)
-			dispatch(getProductDetails(id));
+		if (product && id !== product.id) dispatch(getProductDetails(id));
 	}, [dispatch, id, loading, product]);
 
 	console.log(product);
 
 	return (
 		<Component>
-			{product && Object.keys(product.product).length && (
+			{product && Object.keys(product).length && (
 				<Container container>
 					<Grid item lg={4} md={4} sm={8} xs={12}>
-						<ActionItem product={product.product} />
+						<ActionItem product={product} />
 					</Grid>
 					<RightContainer item lg={8} md={8} sm={8} xs={12}>
-						<Typography>
-							{product.product.title.longTitle}
-						</Typography>
+						<Typography>{product.title.longTitle}</Typography>
 						<Typography
 							style={{
 								marginTop: 5,
@@ -67,15 +64,15 @@ const DetailView = () => {
 						</Typography>
 						<Typography>
 							<Box component="span" style={{ fontSize: 28 }}>
-								₹{product.product.price.cost}
+								₹{product.price.cost}
 							</Box>
 							&nbsp;&nbsp;&nbsp;
 							<Box component="span" style={{ color: "#878787" }}>
-								<strike>₹{product.product.price.mrp}</strike>
+								<strike>₹{product.price.mrp}</strike>
 							</Box>
 							&nbsp;&nbsp;&nbsp;
 							<Box component="span" style={{ color: "#388e3c" }}>
-								{product.product.price.discount}
+								{product.price.discount}
 							</Box>
 						</Typography>
 					</RightContainer>

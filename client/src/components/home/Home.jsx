@@ -30,39 +30,39 @@ const Home = () => {
 			<Component>
 				<Banner />
 				<MidSlide
-					products={products.products}
+					products={products}
 					title="Deal of the Day"
 					timer={true}
 				/>
 				<MidSection />
 				<Slide
-					products={products.products}
+					products={products}
 					title="Discounts for You"
 					timer={false}
 				/>
 				<Slide
-					products={products.products}
+					products={products}
 					title="Suggested Items"
 					timer={false}
 				/>
 				<Slide
-					products={products.products}
+					products={products}
 					title="Top Selection"
 					timer={false}
 				/>
 				<Slide
-					products={products.products}
+					products={products}
 					title="Recommended Items"
 					timer={false}
 				/>
-				<Slide products={products.products} title="Trending Offers" />
+				<Slide products={products} title="Trending Offers" />
 				<Slide
-					products={products.products}
+					products={products}
 					title="Season's Top Picks"
 					timer={false}
 				/>
 				<Slide
-					products={products.products}
+					products={products}
 					title="Top Deals on Accessories"
 					timer={false}
 				/>
