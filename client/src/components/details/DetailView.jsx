@@ -5,9 +5,7 @@ import { useParams } from "react-router-dom";
 
 import { getProductDetails } from "../../redux/actions/productActions";
 import ActionItem from "./ActionItem";
-
-const fassured =
-	"https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/fa_62673a.png";
+import ProductDetail from "./ProductDetail";
 
 const Component = styled(Box)`
 	background: #f2f2f2;
@@ -35,8 +33,6 @@ const DetailView = () => {
 		if (product && id !== product.id) dispatch(getProductDetails(id));
 	}, [dispatch, id, loading, product]);
 
-	console.log(product);
-
 	return (
 		<Component>
 			{product && Object.keys(product).length && (
@@ -45,36 +41,7 @@ const DetailView = () => {
 						<ActionItem product={product} />
 					</Grid>
 					<RightContainer item lg={8} md={8} sm={8} xs={12}>
-						<Typography>{product.title.longTitle}</Typography>
-						<Typography
-							style={{
-								marginTop: 5,
-								color: "#878787",
-								fontSize: 14,
-							}}
-						>
-							8 Ratings & 1 Reviews
-							<Box component="span">
-								<img
-									src={fassured}
-									alt="assured-img"
-									style={{ width: 77, marginLeft: 20 }}
-								/>
-							</Box>
-						</Typography>
-						<Typography>
-							<Box component="span" style={{ fontSize: 28 }}>
-								₹{product.price.cost}
-							</Box>
-							&nbsp;&nbsp;&nbsp;
-							<Box component="span" style={{ color: "#878787" }}>
-								<strike>₹{product.price.mrp}</strike>
-							</Box>
-							&nbsp;&nbsp;&nbsp;
-							<Box component="span" style={{ color: "#388e3c" }}>
-								{product.price.discount}
-							</Box>
-						</Typography>
+						<ProductDetail product={product} />
 					</RightContainer>
 				</Container>
 			)}
