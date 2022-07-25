@@ -24,6 +24,16 @@ const StyledBadge = styled(Badge)`
 	font-size: 15px;
 `;
 
+const ColumnText = styled(TableRow)`
+	font-size: 14px;
+	vertical-align: baseline;
+	& > td {
+		font-size: 14px;
+		margin-top: 10px;
+		border: none;
+	}
+`;
+
 const ProductDetail = ({ product }) => {
 	const fassured =
 		"https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/fa_62673a.png";
@@ -98,21 +108,21 @@ const ProductDetail = ({ product }) => {
 			</SmallText>
 			<Table>
 				<TableBody>
-					<TableRow>
+					<ColumnText>
 						<TableCell style={{ color: "#878787" }}>
 							Delivery
 						</TableCell>
 						<TableCell style={{ fontWeight: 600 }}>
 							Delivery By: {date.toDateString()} | ₹40
 						</TableCell>
-					</TableRow>
-					<TableRow>
+					</ColumnText>
+					<ColumnText>
 						<TableCell style={{ color: "#878787" }}>
 							Warranty
 						</TableCell>
 						<TableCell>No Warranty</TableCell>
-					</TableRow>
-					<TableRow>
+					</ColumnText>
+					<ColumnText>
 						<TableCell style={{ color: "#878787" }}>
 							Seller
 						</TableCell>
@@ -127,8 +137,8 @@ const ProductDetail = ({ product }) => {
 								{product.price.cost}
 							</Typography>
 						</TableCell>
-					</TableRow>
-					<TableRow>
+					</ColumnText>
+					<ColumnText>
 						<TableCell colSpan={2}>
 							<img
 								src={adURL}
@@ -136,13 +146,13 @@ const ProductDetail = ({ product }) => {
 								style={{ width: 390 }}
 							/>{" "}
 						</TableCell>
-					</TableRow>
-					<TableRow>
+					</ColumnText>
+					<ColumnText>
 						<TableCell style={{ color: "#878787" }}>
 							Description
 						</TableCell>
 						<TableCell>{product.description}</TableCell>
-					</TableRow>
+					</ColumnText>
 				</TableBody>
 			</Table>
 		</>

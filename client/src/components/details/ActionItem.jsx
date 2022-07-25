@@ -2,20 +2,30 @@ import { Box, Button, styled } from "@mui/material";
 import { ShoppingCart as CartIcon } from "@mui/icons-material";
 import { Bolt as Flash } from "@mui/icons-material";
 
-const LeftContainer = styled(Box)`
-	min-width: 40%;
-	padding: 40px 0 0 80px;
-`;
+const LeftContainer = styled(Box)(({ theme }) => ({
+	minWidth: "40%",
+	padding: "40px 0 0 80px",
+	[theme.breakpoints.down("lg")]: {
+		padding: "20px 40px",
+	},
+}));
 
 const Image = styled("img")({
 	padding: "15px",
+	width: "95%",
 });
 
-const StyledButton = styled(Button)`
-	width: 48%;
-	height: 50px;
-	border-radius: 4px;
-`;
+const StyledButton = styled(Button)(({ theme }) => ({
+	width: "48%",
+	height: "50px",
+	borderRadius: "4px",
+	[theme.breakpoints.down("lg")]: {
+		width: "46%",
+	},
+	[theme.breakpoints.down("sm")]: {
+		width: "48%",
+	},
+}));
 
 const ActionItem = ({ product }) => {
 	return (
