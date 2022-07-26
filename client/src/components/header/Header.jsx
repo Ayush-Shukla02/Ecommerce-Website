@@ -11,11 +11,11 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useState } from "react";
 
 //components
 import Search from "./Search";
 import CustomButtons from "./CustomButtons";
-import { useState } from "react";
 
 const logoURL =
 	"https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/flipkart-plus_8d85f4.png";
