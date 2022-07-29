@@ -21,20 +21,20 @@ export const addPaymentGateway = async (req, res) => {
 	}
 };
 
-export const paytmResponse = (req, res) => {
+export const paytmResponse = (request, response) => {
 	const form = new formidable.IncomingForm();
-	let paytmCheckSum = req.body.CHECKSUMHASH;
-	delete req.body.CHECKSUMHASH;
+	let paytmCheckSum = request.body.CHECKSUMHASH;
+	delete request.body.CHECKSUMHASH;
 
 	let isVerifySignature = paytmchecksum.verifySignature(
-		req.body,
+		request.body,
 		paytmMerchantKey,
 		paytmCheckSum
 	);
 	if (isVerifySignature) {
 		let paytmParams = {};
-		paytmParams["MID"] = req.body.MID;
-		paytmParams["ORDERID"] = req.body.ORDERID;
+		paytmParams["MID"] = request.body.MID;
+		paytmParams["ORDERID"] = request.body.ORDERID;
 
 		paytmCheckSum
 			.generateSignature(paytmParams, paytmMerchantKey)
@@ -52,15 +52,15 @@ export const paytmResponse = (req, res) => {
 					},
 				};
 
-				let response = "";
+				let res = "";
 				let post_req = https.request(options, function (post_res) {
 					post_res.on("data", function (chunk) {
-						response += chunk;
+						res += chunk;
 					});
 
 					post_res.on("end", function () {
-						let result = JSON.parse(response);
-						res.redirect("https://localhost:3000");
+						let result = JSON.parse(res);
+						response.redirect("http://localhost:3000/");
 					});
 				});
 
