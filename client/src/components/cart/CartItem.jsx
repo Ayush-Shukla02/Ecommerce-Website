@@ -1,23 +1,18 @@
-import { Box, Typography, styled, Button } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { Card, Box, Typography, Button, styled } from "@mui/material";
 
-import { addEllipsis } from "../../utils/common-utils";
-import ButtonGroup from "./ButtonGroup";
-import { removeFromCart } from "../../redux/actions/cartActions";
+import { addEllipsis } from "../../utils/util";
+import GroupButton from "./GroupButton";
 
-const fassured =
-	"https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/fa_62673a.png";
-
-const Component = styled(Box)`
+const Component = styled(Card)`
 	border-top: 1px solid #f0f0f0;
+	border-radius: 0px;
 	display: flex;
-	background: #fff;
 `;
 
 const LeftComponent = styled(Box)`
 	margin: 20px;
-	display: flex,
-	flex-direction : column;
+	display: flex;
+	flex-direction: column;
 `;
 
 const SmallText = styled(Typography)`
@@ -26,57 +21,60 @@ const SmallText = styled(Typography)`
 	margin-top: 10px;
 `;
 
-const Remove = styled(Button)`
-	margin-top: 20px;
-	font-size: 16px;
-	color: #000;
+const Cost = styled(Typography)`
+	font-size: 18px;
 	font-weight: 600;
 `;
 
-const CartItem = ({ item }) => {
-	const dispatch = useDispatch();
+const MRP = styled(Typography)`
+	color: #878787;
+`;
 
-	const removeItemFromCart = (id) => {
-		dispatch(removeFromCart(id));
-	};
+const Discount = styled(Typography)`
+	color: #388e3c;
+`;
+
+const Remove = styled(Button)`
+	margin-top: 20px;
+	font-size: 16px;
+`;
+
+const CartItem = ({ item, removeItemFromCart }) => {
+	const fassured =
+		"https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/fa_62673a.png";
 
 	return (
 		<Component>
 			<LeftComponent>
 				<img
 					src={item.url}
+					style={{ height: 110, width: 110 }}
 					alt="product-img"
-					style={{ height: 110, width: 120 }}
 				/>
-				<ButtonGroup />
+				<GroupButton />
 			</LeftComponent>
 			<Box style={{ margin: 20 }}>
 				<Typography>{addEllipsis(item.title.longTitle)}</Typography>
 				<SmallText>
-					Seller: RetailNet
-					<Box component="span">
+					Seller:RetailNet
+					<span>
 						<img
 							src={fassured}
-							alt="fassured"
 							style={{ width: 50, marginLeft: 10 }}
+							alt="fassured"
 						/>
-					</Box>
+					</span>
 				</SmallText>
 				<Typography style={{ margin: "20px 0" }}>
-					<Box
-						component="span"
-						style={{ fontSize: 18, fontWeight: 600 }}
-					>
-						₹{item.price.cost}
-					</Box>
+					<Cost component="span">₹{item.price.cost}</Cost>
 					&nbsp;&nbsp;&nbsp;
-					<Box component="span" style={{ color: "#878787" }}>
+					<MRP component="span">
 						<strike>₹{item.price.mrp}</strike>
-					</Box>
+					</MRP>
 					&nbsp;&nbsp;&nbsp;
-					<Box component="span" style={{ color: "#388e3c" }}>
-						{item.price.discount}
-					</Box>
+					<Discount component="span">
+						{item.price.discount} off
+					</Discount>
 				</Typography>
 				<Remove onClick={() => removeItemFromCart(item.id)}>
 					Remove

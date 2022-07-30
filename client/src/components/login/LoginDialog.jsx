@@ -1,44 +1,21 @@
+import React, { useState, useEffect } from "react";
 import {
-	Box,
 	Dialog,
+	DialogContent,
 	TextField,
-	Typography,
+	Box,
 	Button,
+	Typography,
 	styled,
 } from "@mui/material";
-import { useState, useContext } from "react";
-import { authenticateSignup, authenticateLogin } from "../../service/api";
-import { DataContext } from "../../context/DataProvider";
 
-const Component = styled(Box)`
+import { authenticateLogin, authenticateSignup } from "../../service/api";
+
+const Component = styled(DialogContent)`
 	height: 70vh;
 	width: 90vh;
-`;
-
-const Image = styled(Box)`
-	background: #2874f0
-		url(https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/login_img_c4a81e.png)
-		center 85% no-repeat;
-	height: 83.4%;
-	width: 33%;
-	padding: 45px 35px;
-	& > p,
-	& > h5 {
-		color: #ffffff;
-		font-weight: 600;
-	}
-`;
-
-const Wrapper = styled(Box)`
-	display: flex;
-	flex-direction: column;
-	padding: 25px 35px;
-	flex: 1;
-	& > div,
-	& > button,
-	& > p {
-		margin-top: 20px;
-	}
+	padding: 0;
+	padding-top: 0;
 `;
 
 const LoginButton = styled(Button)`
@@ -49,47 +26,58 @@ const LoginButton = styled(Button)`
 	border-radius: 2px;
 `;
 
-const RequestOTP = styled(Button)`
-	text-transform: none;
-	background: #fff;
-	color: #2874f0;
-	height: 48px;
-	border-radius: 2px;
-	box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+const Text = styled(Typography)`
+	color: #878787;
+	font-size: 12px;
 `;
 
-const Text = styled(Typography)`
-	font-size: 12px;
-	color: #878787;
+const CreateAccount = styled(Typography)`
+	margin: auto 0 5px 0;
+	text-align: center;
+	color: #2874f0;
+	font-weight: 600;
+	font-size: 14px;
+	cursor: pointer;
+`;
+
+const Wrapper = styled(Box)`
+	padding: 25px 35px;
+	display: flex;
+	flex: 1;
+	overflow: auto;
+	flex-direction: column;
+	& > div,
+	& > button,
+	& > p {
+		margin-top: 20px;
+	}
 `;
 
 const Error = styled(Typography)`
+	font-size: 10px;
 	color: #ff6161;
-	font-size: 11px;
 	line-height: 0;
 	margin-top: 10px;
 	font-weight: 600;
 `;
 
-const CreateAccount = styled(Typography)`
-	font-size: 14px;
-	text-align: center;
-	color: #2874f0;
-	font-weight: 600;
-	cursor: pointer;
+const Image = styled(Box)`
+	background: #2874f0
+		url(https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/login_img_c4a81e.png)
+		center 85% no-repeat;
+	width: 40%;
+	height: 100%;
+	padding: 45px 35px;
+	& > p,
+	& > h5 {
+		color: #ffffff;
+		font-weight: 600;
+	}
 `;
 
-const accountInitialValues = {
-	login: {
-		view: "login",
-		heading: "Login",
-		subHeading: "Get access to your Orders, Wishlist and Recommendations",
-	},
-	signup: {
-		view: "signup",
-		heading: "Looks like you're new here!",
-		subHeading: "Sign Up to get started",
-	},
+const loginInitialValues = {
+	username: "",
+	password: "",
 };
 
 const signupInitialValues = {
@@ -101,44 +89,44 @@ const signupInitialValues = {
 	phone: "",
 };
 
-const loginInitialValues = {
-	username: "",
-	password: "",
+const accountInitialValues = {
+	login: {
+		view: "login",
+		heading: "Login",
+		subHeading: "Get access to your Orders, Wishlist and Recommendations",
+	},
+	signup: {
+		view: "signup",
+		heading: "Looks like you're new here",
+		subHeading: "Signup to get started",
+	},
 };
 
-const LoginDialog = ({ open, setOpen }) => {
-	const [account, toggleAccount] = useState(accountInitialValues.login);
-	const [signup, setSignup] = useState(signupInitialValues);
+const LoginDialog = ({ open, setOpen, setAccount }) => {
 	const [login, setLogin] = useState(loginInitialValues);
-	const [error, setError] = useState(false);
+	const [signup, setSignup] = useState(signupInitialValues);
+	const [error, showError] = useState(false);
+	const [account, toggleAccount] = useState(accountInitialValues.login);
 
-	const { setAccount } = useContext(DataContext);
+	useEffect(() => {
+		showError(false);
+	}, [login]);
 
-	const toggleSignUp = () => {
-		toggleAccount(accountInitialValues.signup);
-	};
-
-	const handleClose = () => {
-		setOpen(false);
-		toggleAccount(accountInitialValues.login);
-		setError(false);
+	const onValueChange = (e) => {
+		setLogin({ ...login, [e.target.name]: e.target.value });
 	};
 
 	const onInputChange = (e) => {
 		setSignup({ ...signup, [e.target.name]: e.target.value });
 	};
 
-	const onValueChange = (e) => {
-		setLogin({ ...login, [e.target.name]: e.target.value });
-	};
-
 	const loginUser = async () => {
 		let response = await authenticateLogin(login);
-		if (response.status === 200) {
-			setAccount(response.data.data.firstname);
+		if (!response) showError(true);
+		else {
+			showError(false);
 			handleClose();
-		} else {
-			setError(true);
+			setAccount(login.username);
 		}
 	};
 
@@ -146,7 +134,16 @@ const LoginDialog = ({ open, setOpen }) => {
 		let response = await authenticateSignup(signup);
 		if (!response) return;
 		handleClose();
-		setAccount(signup.firstname);
+		setAccount(signup.username);
+	};
+
+	const toggleSignup = () => {
+		toggleAccount(accountInitialValues.signup);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+		toggleAccount(accountInitialValues.login);
 	};
 
 	return (
@@ -156,10 +153,10 @@ const LoginDialog = ({ open, setOpen }) => {
 			PaperProps={{ sx: { maxWidth: "unset" } }}
 		>
 			<Component>
-				<Box style={{ display: "flex", height: "100% " }}>
+				<Box style={{ display: "flex", height: "100%" }}>
 					<Image>
 						<Typography variant="h5">{account.heading}</Typography>
-						<Typography style={{ marginTop: "20px" }}>
+						<Typography style={{ marginTop: 20 }}>
 							{account.subHeading}
 						</Typography>
 					</Image>
@@ -167,23 +164,21 @@ const LoginDialog = ({ open, setOpen }) => {
 						<Wrapper>
 							<TextField
 								variant="standard"
+								onChange={(e) => onValueChange(e)}
 								name="username"
-								onChange={(e) => {
-									onValueChange(e);
-								}}
 								label="Enter Username"
 							/>
+							{error && (
+								<Error>
+									Please enter valid Email ID/Mobile number
+								</Error>
+							)}
 							<TextField
 								variant="standard"
+								onChange={(e) => onValueChange(e)}
 								name="password"
-								onChange={(e) => {
-									onValueChange(e);
-								}}
 								label="Enter Password"
 							/>
-							{error && (
-								<Error>Please enter valid credentials.</Error>
-							)}
 							<Text>
 								By continuing, you agree to Flipkart's Terms of
 								Use and Privacy Policy.
@@ -191,11 +186,7 @@ const LoginDialog = ({ open, setOpen }) => {
 							<LoginButton onClick={() => loginUser()}>
 								Login
 							</LoginButton>
-							<Typography style={{ textAlign: "center" }}>
-								OR
-							</Typography>
-							<RequestOTP>Request OTP</RequestOTP>
-							<CreateAccount onClick={() => toggleSignUp()}>
+							<CreateAccount onClick={() => toggleSignup()}>
 								New to Flipkart? Create an account
 							</CreateAccount>
 						</Wrapper>
@@ -203,53 +194,40 @@ const LoginDialog = ({ open, setOpen }) => {
 						<Wrapper>
 							<TextField
 								variant="standard"
-								label="Enter First Name"
+								onChange={(e) => onInputChange(e)}
 								name="firstname"
-								onChange={(e) => {
-									onInputChange(e);
-								}}
+								label="Enter Firstname"
 							/>
 							<TextField
 								variant="standard"
-								label="Enter Last Name"
+								onChange={(e) => onInputChange(e)}
 								name="lastname"
-								onChange={(e) => {
-									onInputChange(e);
-								}}
+								label="Enter Lastname"
 							/>
 							<TextField
 								variant="standard"
-								label="Enter Username"
+								onChange={(e) => onInputChange(e)}
 								name="username"
-								onChange={(e) => {
-									onInputChange(e);
-								}}
+								label="Enter Username"
 							/>
 							<TextField
 								variant="standard"
-								label="Enter Email"
+								onChange={(e) => onInputChange(e)}
 								name="email"
-								onChange={(e) => {
-									onInputChange(e);
-								}}
+								label="Enter Email"
 							/>
 							<TextField
 								variant="standard"
-								label="Enter Password"
+								onChange={(e) => onInputChange(e)}
 								name="password"
-								onChange={(e) => {
-									onInputChange(e);
-								}}
+								label="Enter Password"
 							/>
 							<TextField
 								variant="standard"
-								label="Enter Phone"
+								onChange={(e) => onInputChange(e)}
 								name="phone"
-								onChange={(e) => {
-									onInputChange(e);
-								}}
+								label="Enter Phone"
 							/>
-
 							<LoginButton onClick={() => signupUser()}>
 								Continue
 							</LoginButton>

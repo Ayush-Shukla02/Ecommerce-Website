@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Box, Menu, MenuItem, Typography, styled } from "@mui/material";
-import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import { Typography, Menu, MenuItem, Box, styled } from "@mui/material";
+import { PowerSettingsNew } from "@mui/icons-material";
 
 const Component = styled(Menu)`
 	margin-top: 5px;
@@ -8,30 +8,28 @@ const Component = styled(Menu)`
 
 const Logout = styled(Typography)`
 	font-size: 14px;
-	margin-left: 10px;
+	margin-left: 20px;
 `;
 
 const Profile = ({ account, setAccount }) => {
 	const [open, setOpen] = useState(false);
 
-	const handleCLick = (e) => {
-		setOpen(e.currentTarget);
+	const handleClick = (event) => {
+		setOpen(event.currentTarget);
 	};
 
 	const handleClose = () => {
 		setOpen(false);
 	};
 
-	const logoutUser = () => {
+	const logout = () => {
 		setAccount("");
 	};
 
 	return (
 		<>
-			<Box onClick={handleCLick}>
-				<Typography style={{ marginTop: 2, cursor: "pointer" }}>
-					{account}
-				</Typography>
+			<Box onClick={handleClick}>
+				<Typography style={{ marginTop: 2 }}>{account}</Typography>
 			</Box>
 			<Component
 				anchorEl={open}
@@ -41,10 +39,10 @@ const Profile = ({ account, setAccount }) => {
 				<MenuItem
 					onClick={() => {
 						handleClose();
-						logoutUser();
+						logout();
 					}}
 				>
-					<PowerSettingsNewIcon color="primary" fontSize="small" />
+					<PowerSettingsNew fontSize="small" color="primary" />
 					<Logout>Logout</Logout>
 				</MenuItem>
 			</Component>

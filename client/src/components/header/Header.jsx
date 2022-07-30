@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
 	AppBar,
 	Toolbar,
@@ -6,40 +7,25 @@ import {
 	IconButton,
 	Drawer,
 	List,
-	ListItem,
 	styled,
 } from "@mui/material";
+import { Menu } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useState } from "react";
 
-//components
-import Search from "./Search";
 import CustomButtons from "./CustomButtons";
-
-const logoURL =
-	"https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/flipkart-plus_8d85f4.png";
-const subURL =
-	"https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/plus_aef861.png";
+import Search from "./Search";
 
 const StyledHeader = styled(AppBar)`
-	backgroud: #2874f0;
+	background: #2874f0;
 	height: 55px;
 `;
 
 const Component = styled(Link)`
 	margin-left: 12%;
 	line-height: 0;
+	color: #ffffff;
 	text-decoration: none;
-	color: inherit;
 `;
-
-const CustomButtonWrapper = styled(Box)(({ theme }) => ({
-	margin: "0 5% 0 auto",
-	[theme.breakpoints.down("md")]: {
-		display: "none",
-	},
-}));
 
 const SubHeading = styled(Typography)`
 	font-size: 10px;
@@ -54,51 +40,65 @@ const PlusImage = styled("img")({
 
 const MenuButton = styled(IconButton)(({ theme }) => ({
 	display: "none",
-	[theme.breakpoints.down("md")]: {
+	[theme.breakpoints.down("sm")]: {
 		display: "block",
 	},
 }));
 
-const Header = () => {
-	const [open, setOpen] = useState(false);
+const CustomButtonWrapper = styled("span")(({ theme }) => ({
+	margin: "0 5% 0 auto",
+	[theme.breakpoints.down("sm")]: {
+		display: "none",
+	},
+}));
 
-	const handleOpen = () => {
-		setOpen(true);
-	};
+const Header = () => {
+	const logoURL =
+		"https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/flipkart-plus_8d85f4.png";
+	const subURL =
+		"https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/plus_aef861.png";
+
+	const [open, setOpen] = useState(false);
 
 	const handleClose = () => {
 		setOpen(false);
 	};
 
+	const handleOpen = () => {
+		setOpen(true);
+	};
+
 	const list = () => (
-		<Box style={{ width: 200 }} onClick={handleClose}>
+		<Box style={{ width: 250 }} onClick={handleClose}>
 			<List>
-				<ListItem button>
+				<listItem button>
 					<CustomButtons />
-				</ListItem>
+				</listItem>
 			</List>
 		</Box>
 	);
 
 	return (
-		<StyledHeader>
+		<StyledHeader position="fixed">
 			<Toolbar style={{ minHeight: 55 }}>
 				<MenuButton color="inherit" onClick={handleOpen}>
-					<MenuIcon />
+					<Menu />
 				</MenuButton>
+
 				<Drawer open={open} onClose={handleClose}>
 					{list()}
 				</Drawer>
+
 				<Component to="/">
-					<img src={logoURL} alt="logo" style={{ width: 75 }} />
-					<Box style={{ display: "flex" }}>
+					<img src={logoURL} style={{ width: 75 }} alt="logo" />
+					<Box component="span" style={{ display: "flex" }}>
 						<SubHeading>
 							Explore&nbsp;
 							<Box component="span" style={{ color: "#FFE500" }}>
 								Plus
 							</Box>
 						</SubHeading>
-						<PlusImage src={subURL} alt="subLogo" />
+						<PlusImage src={subURL} />
 					</Box>
 				</Component>
 				<Search />

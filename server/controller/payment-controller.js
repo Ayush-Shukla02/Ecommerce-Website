@@ -2,72 +2,73 @@ import formidable from "formidable";
 import https from "https";
 
 import paytmchecksum from "../paytm/PaytmChecksum.js";
-import { paytmParams, paytmMerchantKey } from "../index.js";
+import { paytmParams, paytmMerchantkey } from "../index.js";
 
-export const addPaymentGateway = async (req, res) => {
+export const addPaymentGateway = async (request, response) => {
+	let paytmCheckSum = await paytmchecksum.generateSignature(
+		paytmParams,
+		paytmMerchantkey
+	);
 	try {
-		let paytmCheckSum = await paytmchecksum.generateSignature(
-			paytmParams,
-			paytmMerchantKey
-		);
 		let params = {
 			...paytmParams,
 			CHECKSUMHASH: paytmCheckSum,
 		};
-
-		res.status(200).json(params);
+		response.json(params);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		console.log(error);
 	}
 };
 
-export const paytmResponse = (request, response) => {
+export const paymentResponse = (request, response) => {
 	const form = new formidable.IncomingForm();
 	let paytmCheckSum = request.body.CHECKSUMHASH;
 	delete request.body.CHECKSUMHASH;
 
-	let isVerifySignature = paytmchecksum.verifySignature(
+	var isVerifySignature = paytmchecksum.verifySignature(
 		request.body,
-		paytmMerchantKey,
+		"bKMfNxPPf_QdZppa",
 		paytmCheckSum
 	);
+
 	if (isVerifySignature) {
-		let paytmParams = {};
+		var paytmParams = {};
 		paytmParams["MID"] = request.body.MID;
 		paytmParams["ORDERID"] = request.body.ORDERID;
 
-		paytmCheckSum
-			.generateSignature(paytmParams, paytmMerchantKey)
+		paytmchecksum
+			.generateSignature(paytmParams, "bKMfNxPPf_QdZppa")
 			.then(function (checksum) {
 				paytmParams["CHECKSUMHASH"] = checksum;
 
-				let post_data = JSON.stringify(paytmParams);
-				let options = {
+				var post_data = JSON.stringify(paytmParams);
+
+				var options = {
 					hostname: "securegw-stage.paytm.in",
 					port: 443,
 					path: "/order/status",
+					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 						"Content-Length": post_data.length,
 					},
 				};
 
-				let res = "";
-				let post_req = https.request(options, function (post_res) {
+				var res = "";
+				var post_req = https.request(options, function (post_res) {
 					post_res.on("data", function (chunk) {
 						res += chunk;
 					});
 
 					post_res.on("end", function () {
 						let result = JSON.parse(res);
-						response.redirect("http://localhost:3000/");
+						response.redirect(`http://localhost:3000/`);
 					});
 				});
-
 				post_req.write(post_data);
 				post_req.end();
 			});
 	} else {
-		console.log("CheckSum mismatched");
+		console.log("Checksum Mismatched");
 	}
 };

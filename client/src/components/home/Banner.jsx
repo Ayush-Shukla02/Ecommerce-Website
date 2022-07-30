@@ -1,7 +1,7 @@
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 import { styled } from "@mui/material";
-import { bannerData } from "../../constants/data";
+import Carousel from "react-multi-carousel";
+
+import { bannerData } from "../../constant/data";
 
 const responsive = {
 	desktop: {
@@ -21,7 +21,7 @@ const responsive = {
 const Image = styled("img")(({ theme }) => ({
 	width: "100%",
 	height: 280,
-	[theme.breakpoints.down("md")]: {
+	[theme.breakpoints.down("sm")]: {
 		objectFit: "cover",
 		height: 180,
 	},
@@ -32,17 +32,19 @@ const Banner = () => {
 		<Carousel
 			swipeable={false}
 			draggable={false}
-			infinite={true}
 			responsive={responsive}
+			infinite={true}
 			autoPlay={true}
 			autoPlaySpeed={4000}
+			keyBoardControl={true}
+			showDots={false}
 			slidesToSlide={1}
+			containerClass="carousel-container"
 			dotListClass="custom-dot-list-style"
 			itemClass="carousel-item-padding-40-px"
-			containerClass="carousel-container"
 		>
-			{bannerData.map((data) => (
-				<Image src={data.url} alt="banner" />
+			{bannerData.map((image) => (
+				<Image src={image.url} alt="banner" id={image.id} />
 			))}
 		</Carousel>
 	);
